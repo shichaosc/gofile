@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gocolly/colly"
 	"log"
+	"strings"
 )
 
 func failOnError(err error, msg string) {
@@ -20,7 +21,7 @@ var p = rabbitmq.Producer{
 }
 
 func main() {
-	rabbitmq.Receive("colly.queue", collyQiDianIndex)
+	rabbitmq.Receive("colly.queue.index", collyQiDianIndex)
 }
 
 func collyQiDianIndex(url string) {
@@ -51,7 +52,11 @@ func collyQiDianIndex(url string) {
 	c.OnHTML("div[class='volume-wrap'] div[class='volume'] ul li a", func(e *colly.HTMLElement) {
 		//获得章节名, url
 		fmt.Println(e.Text)
-		p.Publish(e.Attr("href"))
+		book_url := e.Attr("href")
+		if strings.Index(book_url, "https:") == -1 {
+			book_url = "https:" + book_url
+		}
+		p.Publish(book_url)
 	})
 
 	c.OnScraped(func(r *colly.Response) {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gocolly/colly"
 	"log"
+	"strings"
 )
 
 //解析首页
@@ -30,6 +31,9 @@ func main() {
 	c.OnHTML("div[class='book-list'] ul a[class='name']", func(e *colly.HTMLElement) {
 		//三江
 		book_url := e.Attr("href")
+		if strings.Index(book_url, "https:") == -1 {
+			book_url = "https:" + book_url
+		}
 		p.Publish(book_url)
 	})
 

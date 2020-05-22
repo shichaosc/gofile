@@ -17,8 +17,7 @@ func main() {
 //解析内容
 func collyContent(url string) {
 	order++
-	var book = postgresql.Book{}
-	book.Order = order
+	var book = postgresql.BookContent{}
 	c := colly.NewCollector()
 
 	c.OnRequest(func(r *colly.Request) {

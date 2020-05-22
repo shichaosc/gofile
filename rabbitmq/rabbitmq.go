@@ -56,7 +56,6 @@ func (p *Producer) Publish(msg string) {
 
 	//p.Connection.channel.NotifyClose(p.notifyClose)
 	//p.Connection.channel.NotifyPublish(p.notifyConfirm)
-
 	err := conn.channel.Publish(
 		p.Exchange, //交换机
 		p.Qname,    //routing_key
@@ -93,6 +92,7 @@ func Receive(queueName string, processUrl func(url string)) {
 	go func() {
 		//fmt.Println(*msgs)
 		for d := range msgs {
+			fmt.Printf(" -----")
 			s := string(d.Body)
 			processUrl(s)
 		}
