@@ -3,21 +3,36 @@ package main
 import (
 	"./postgresql"
 	"./rabbitmq"
+	"encoding/json"
 	"fmt"
 	"github.com/gocolly/colly"
 	"log"
+	"math/big"
+	"time"
 )
 
-var order = 0
+type Item struct {
+	Url     string  `json:"url"`
+	TitleId big.Int `json:"title_id"`
+}
 
 func main() {
 	rabbitmq.Receive("qidian.book.content", collyContent)
 }
 
 //解析内容
-func collyContent(url string) {
-	order++
-	var book = postgresql.BookContent{}
+func collyContent(data string) {
+
+	targetItem := Item{}
+
+	json.Unmarshal([]byte(data), &targetItem)
+
+	var bookContent = postgresql.BookContent{}
+
+	bookContent.TitleId = targetItem.TitleId
+	bookContent.CreatedOn = time.Now()
+	bookContent.UpdatedOn = time.Now()
+
 	c := colly.NewCollector()
 
 	c.OnRequest(func(r *colly.Request) {
@@ -41,21 +56,20 @@ func collyContent(url string) {
 	c.OnHTML("h3[class='j_chapterName']", func(e *colly.HTMLElement) {
 		//章节名
 		chapter := e.Text
-		book.Title = chapter
 		fmt.Println(chapter)
 	})
 
 	c.OnHTML("div[class='read-content j_readContent']", func(e *colly.HTMLElement) {
 		//内容
 		content := e.Text
-		book.Content = content
+		bookContent.Content = content
 		fmt.Println(content)
 	})
 
 	c.OnScraped(func(r *colly.Response) {
-		postgresql.InsertBook(book)
+		postgresql.InsertBookContent(bookContent)
 		fmt.Println("Finished", r.Request.URL)
 	})
-	c.Visit(url)
+	c.Visit(targetItem.Url)
 
 }
