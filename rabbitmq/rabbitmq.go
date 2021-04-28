@@ -3,7 +3,6 @@ package rabbitmq
 import (
 	"fmt"
 	"github.com/streadway/amqp"
-	_ "github.com/streadway/amqp"
 	"log"
 )
 
@@ -32,7 +31,7 @@ func failOnErr(err error, msg string) {
 
 func ConnMq() *Connection {
 	fmt.Println("创建rabbitmq连接***********************************")
-	connection, err := amqp.Dial("amqp://books:book123@139.9.92.116:5672/")
+	connection, err := amqp.Dial("amqp://admin:admin@82.157.5.211:5672/")
 	//conn.connection = new(amqp.Connection)
 	//conn.connection = connection
 	if err != nil {
@@ -52,7 +51,7 @@ func ConnMq() *Connection {
 
 var conn = ConnMq()
 
-func (p *Producer) Publish(msg string) {
+func (p *Producer) Publish(msg []byte) {
 
 	//p.Connection.channel.NotifyClose(p.notifyClose)
 	//p.Connection.channel.NotifyPublish(p.notifyConfirm)
@@ -63,7 +62,7 @@ func (p *Producer) Publish(msg string) {
 		false,
 		amqp.Publishing{
 			ContentType: "text/plain",
-			Body:        []byte(msg),
+			Body:        msg,
 		},
 	)
 	if err != nil {

@@ -3,9 +3,11 @@ package postgresql
 import (
 	"fmt"
 	"log"
+	"reptile_book/model"
+	_ "reptile_book/model"
 )
 
-func InsertBookType(bookType BookType) bool {
+func InsertBookType(bookType model.BookType) bool {
 	tx, err := DB.Begin()
 	if err != nil {
 		fmt.Println("tx fail")
@@ -28,7 +30,7 @@ func InsertBookType(bookType BookType) bool {
 	return true
 }
 
-func InsertBook(book Book) bool {
+func InsertBook(book model.Book) bool {
 	tx, err := DB.Begin()
 	if err != nil {
 		fmt.Println("tx fail")
@@ -51,7 +53,7 @@ func InsertBook(book Book) bool {
 	return true
 }
 
-func InsertBookTitle(bookTitle BookTitle) bool {
+func InsertBookTitle(bookTitle model.BookTitle) bool {
 	tx, err := DB.Begin()
 	if err != nil {
 		fmt.Println("tx fail")
@@ -74,7 +76,7 @@ func InsertBookTitle(bookTitle BookTitle) bool {
 	return true
 }
 
-func InsertBookContent(bookContent BookContent) bool {
+func InsertBookContent(bookContent model.BookContent) bool {
 	//开启事务
 	tx, err := DB.Begin()
 	if err != nil {

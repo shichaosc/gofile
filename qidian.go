@@ -1,10 +1,10 @@
 package main
 
 import (
-	"./rabbitmq"
 	"fmt"
 	"github.com/gocolly/colly"
 	"log"
+	"reptile_book/rabbitmq"
 	"strings"
 )
 
@@ -34,7 +34,9 @@ func main() {
 		if strings.Index(book_url, "https:") == -1 {
 			book_url = "https:" + book_url
 		}
-		p.Publish(book_url)
+		fmt.Println("sanjiang")
+		fmt.Println(book_url)
+		p.Publish([]byte(book_url))
 	})
 
 	c.OnScraped(func(r *colly.Response) {

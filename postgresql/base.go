@@ -4,41 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
-	"math/big"
-	"time"
 )
-
-type BookContent struct {
-	Id        big.Int
-	TitleId   big.Int
-	Content   string
-	CreatedOn time.Time
-	UpdatedOn time.Time
-}
-
-type BookTitle struct {
-	Id        big.Int
-	TitleName string
-	Sort      int
-	BookId    big.Int
-	CreatedOn time.Time
-	UpdatedOn time.Time
-}
-
-type Book struct {
-	Id        big.Int
-	BookName  string
-	TypeId    int
-	CreatedOn time.Time
-	UpdatedOn time.Time
-}
-
-type BookType struct {
-	Id        int
-	TypeName  string
-	CreatedOn time.Time
-	UpdatedOn time.Time
-}
 
 const (
 	HOST     = "139.9.92.116"

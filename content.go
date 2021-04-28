@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./postgresql"
+	"./model"
 	"./rabbitmq"
 	"encoding/json"
 	"fmt"
@@ -27,9 +27,9 @@ func collyContent(data string) {
 
 	json.Unmarshal([]byte(data), &targetItem)
 
-	var bookContent = postgresql.BookContent{}
+	var bookContent = model.BookContent{}
 
-	bookContent.TitleId = targetItem.TitleId
+	//bookContent.TitleId = targetItem.TitleId
 	bookContent.CreatedOn = time.Now()
 	bookContent.UpdatedOn = time.Now()
 
@@ -67,7 +67,7 @@ func collyContent(data string) {
 	})
 
 	c.OnScraped(func(r *colly.Response) {
-		postgresql.InsertBookContent(bookContent)
+		//mysql.InsertBookContent(bookContent)
 		fmt.Println("Finished", r.Request.URL)
 	})
 	c.Visit(targetItem.Url)

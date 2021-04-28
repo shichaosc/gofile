@@ -3,7 +3,7 @@
 -- drop table book_title;
 -- drop table book_book;
 -- drop table book_type;
-
+create database book DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
 
 create table user_auther(
     id int primary key not null,
